@@ -1,14 +1,10 @@
-ocs-app: {
-repositories: [
-"jitpack",
-"central"
-],
-dependencies: [
-"com.github.tmtsoftware:sequencer-scripts:latest.release"
-],
-mainClass: "esw.ocs.app.SequencerApp",
-properties: {
-csw-networks.hostname.automatic: "on",
-csw-logging.appender-config.file.baseLogPath: "/tmp"
-}
+{
+  "repositories": [
+    "jitpack",
+    "central"
+  ],
+  "mainClass": "esw.sm.app.TestApp",
+  "dependencies": [
+    "com.github.tmtsoftware.esw:esw-sm-app_2.13:e709f782d"
+  ]
 }
