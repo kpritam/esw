@@ -39,6 +39,7 @@ jobs:
           sudo mv /usr/lib/postgresql/12/bin/postgres /usr/local/bin
           sudo mkdir /usr/local/var
           sudo mv /var/lib/postgresql/12/main/ /usr/local/var/postgres
+          sudo systemctl stop postgresql
 
       - name: Install Kotlin
         run: |
