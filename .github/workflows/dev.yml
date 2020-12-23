@@ -70,7 +70,9 @@ jobs:
           path: target/scala-2.13/scoverage-report
 
       - name: Multi-Jvm Tests
-        run: sbt -DgenerateStoryReport=true esw-integration-test/multi-jvm:test
+        run: |
+          sudo -i -u postgres
+          sbt -DgenerateStoryReport=true esw-integration-test/multi-jvm:testOnly esw.integration.IntegrationTestWithAuth
 
       - name: Generate RTM
         if: always()
