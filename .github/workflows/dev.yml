@@ -15,7 +15,7 @@ jobs:
   build:
     runs-on: ubuntu-18.04
     env:
-      PGDATA: "/usr/local/var/postgres"
+      PGDATA: /tmp/postgres/
 
     steps:
       - uses: actions/checkout@v2
@@ -35,14 +35,12 @@ jobs:
 
       - name: Install Postgres
         run: |
-          sudo apt-get install postgresql-12
-          sudo mv /usr/lib/postgresql/12/bin/postgres /usr/local/bin
-          sudo mkdir /usr/local/var
-          sudo mv /var/lib/postgresql/12/main/ /usr/local/var/postgres
-          sudo chmod 777 /usr/local/var/postgres/
-          sudo systemctl stop postgresql
-          sudo systemctl disable postgresql
-
+          sudo apt-get update
+          sudo apt-get -y install postgresql-12
+          echo "/usr/lib/postgresql/12/bin/" >> $GITHUB_PATH
+          sudo -i -u postgres
+          /usr/lib/postgresql/12/bin/initdb -D /tmp/postgres/
+          
       - name: Install Kotlin
         run: |
           curl -s https://get.sdkman.io | bash
