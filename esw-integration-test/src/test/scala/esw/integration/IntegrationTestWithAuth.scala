@@ -16,6 +16,7 @@ import csw.prefix.models.Subsystem._
 import csw.testkit.ConfigTestKit
 import esw.agent.akka.AgentSetup
 import esw.agent.akka.app.AgentSettings
+import esw.agent.akka.app.process.cs.Coursier
 import esw.agent.akka.client.AgentClient
 import esw.agent.service.api.AgentServiceApi
 import esw.agent.service.api.client.AgentServiceClientFactory
@@ -63,6 +64,7 @@ class IntegrationTestWithAuth extends EswTestKit(AAS) with GatewaySetup with Age
     agentServiceWiring = AgentServiceApp.start(startLogging = false)
     val httpLocation = resolveHTTPLocation(agentServiceWiring.prefix, ComponentType.Service)
     agentService = AgentServiceClientFactory(httpLocation, () => tokenWithEswUserRole())
+    Coursier.locationAgentApp(Some("713742785d")).fetch("asdjklka")
   }
 
   override def afterAll(): Unit = {
@@ -331,10 +333,6 @@ class IntegrationTestWithAuth extends EswTestKit(AAS) with GatewaySetup with Age
 
     "spawn and kill Database Server on a given agent | ESW-368" in {
 
-      println("#######-----####")
-      println(sys.env.get("PGDATA"))
-      println("#######-----####")
-
       val pgDataConfPath            = ResourceReader.copyToTmp("pg_hba.conf")
       val dbUnixSocketDirs          = "/tmp"
       val postgresServerComponentID = ComponentId(AgentConstants.databasePrefix, Service)
@@ -365,7 +363,7 @@ class IntegrationTestWithAuth extends EswTestKit(AAS) with GatewaySetup with Age
       catch {
         case NonFatal(e) =>
           println(
-            "Make sure 'PGDATA' env variable is set where postgres is installed e.g. for mac: /usr/local/var/postgres"
+            "Make sure 'PGDATA' env variable is set where postgres database is installed e.g. for mac: /usr/local/var/postgres"
           )
           throw e
       }

@@ -56,7 +56,9 @@ jobs:
           sbt -DenableFatalWarnings=true ';set every Seq(scalafmtOnCompile := false); test:compile; multi-jvm:compile;'
 
       - name: Tests
-        run: sbt -Dakka.actor.serialize-messages=on -DenableCoverage=true -DgenerateStoryReport=true test:test
+        run: |
+        sudo -i -u postgres
+        sbt -Dakka.actor.serialize-messages=on -DenableCoverage=true -DgenerateStoryReport=true test:test
 
       - name: Coverage Report
         run: |
@@ -70,9 +72,7 @@ jobs:
           path: target/scala-2.13/scoverage-report
 
       - name: Multi-Jvm Tests
-        run: |
-          sudo -i -u postgres
-          sbt -DgenerateStoryReport=true esw-integration-test/multi-jvm:testOnly esw.integration.IntegrationTestWithAuth
+        run: sbt -DgenerateStoryReport=true esw-integration-test/multi-jvm:test
 
       - name: Generate RTM
         if: always()
