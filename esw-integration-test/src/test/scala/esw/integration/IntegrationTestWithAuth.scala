@@ -64,7 +64,7 @@ class IntegrationTestWithAuth extends EswTestKit(AAS) with GatewaySetup with Age
     agentServiceWiring = AgentServiceApp.start(startLogging = false)
     val httpLocation = resolveHTTPLocation(agentServiceWiring.prefix, ComponentType.Service)
     agentService = AgentServiceClientFactory(httpLocation, () => tokenWithEswUserRole())
-    Coursier.locationAgentApp(Some("713742785d")).fetch("asdjklka")
+    Coursier.locationAgentApp(Some("713742785d")).fetch("src/test/resources/apps.json")
   }
 
   override def afterAll(): Unit = {
