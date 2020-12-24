@@ -32,7 +32,7 @@ jobs:
           cd redis-stable
           make
           sudo cp src/redis-sentinel /usr/local/bin/
-          
+
       - name: Install Kotlin
         run: |
           curl -s https://get.sdkman.io | bash
@@ -46,13 +46,13 @@ jobs:
           sbtn clean
           sbtn makeSite
           sbt -DenableFatalWarnings=true ';set every Seq(scalafmtOnCompile := false); test:compile; multi-jvm:compile;'
-      
+
       - name: Install Postgres
         run: |
           sudo apt-get update
           sudo apt-get -y install postgresql-12
           echo "/usr/lib/postgresql/12/bin/" >> $GITHUB_PATH
           sudo -i -u postgres
-          /usr/lib/postgresql/12/bin/initdb -D /tmp/postgres/   
-          sbt publishLocal       
-          sbt -Dakka.actor.serialize-messages=on -DenableCoverage=true -DgenerateStoryReport=true test:test
+          /usr/lib/postgresql/12/bin/initdb -D /tmp/postgres/
+          sbt publishLocal
+          sbt -Dakka.actor.serialize-messages=on -DenableCoverage=true -DgenerateStoryReport=true esw-integration-test/testOnly esw.integration.IntegrationTestWithAuth
