@@ -47,7 +47,7 @@ jobs:
           echo "/usr/lib/postgresql/12/bin/" >> $GITHUB_PATH
           sudo mv /usr/lib/postgresql/12/bin/ /usr/local/bin/
           sudo -i -u postgres
-          /usr/lib/postgresql/12/bin/initdb -D /tmp/postgres/
+          /usr/local/bin/initdb -D /tmp/postgres/
           postgres --help
           sbt publishLocal
           sbt -Dakka.actor.serialize-messages=on -DenableCoverage=true -DgenerateStoryReport=true esw-integration-test/testOnly esw.integration.IntegrationTestWithAuth
