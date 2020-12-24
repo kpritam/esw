@@ -24,7 +24,6 @@ jobs:
           echo "/usr/lib/postgresql/13/bin" >> $GITHUB_PATH
           /usr/lib/postgresql/13/bin/initdb -D /tmp/postgres
 
-      - run: postgres --hba_file=pg_hba.conf --unix_socket_directories=/tmp -i -p 8085
       - run: sbtn esw-integration-test/testOnly esw.integration.IntegrationTestWithAuth
       - name: Check logs
           if: always()
