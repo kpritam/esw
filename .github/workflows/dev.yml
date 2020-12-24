@@ -45,9 +45,9 @@ jobs:
           sudo apt-get update
           sudo apt-get -y install postgresql-12
           echo "/usr/lib/postgresql/12/bin/" >> $GITHUB_PATH
-          sudo mv /usr/lib/postgresql/12/bin/ /usr/local/bin/
           sudo -i -u postgres
-          /usr/local/bin/initdb -D /tmp/postgres/
+          /usr/lib/postgresql/12/bin/initdb -D /tmp/postgres/
+          export PATH="//usr/lib/postgresql/12/bin/:$PATH"
           postgres --help
           sbt publishLocal
           sbt -Dakka.actor.serialize-messages=on -DenableCoverage=true -DgenerateStoryReport=true esw-integration-test/testOnly esw.integration.IntegrationTestWithAuth
