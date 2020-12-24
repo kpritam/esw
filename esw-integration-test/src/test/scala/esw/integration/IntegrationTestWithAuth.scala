@@ -54,7 +54,7 @@ class IntegrationTestWithAuth extends EswTestKit(AAS) with GatewaySetup with Age
 
     "spawn and kill Database Server on a given agent | ESW-368" in {
 
-      val pgDataConfPath            = ResourceReader.copyToTmp("pg_hba.conf")
+      val pgDataConfPath            = getClass.getResource("/pg_hba.conf").getPath
       val dbUnixSocketDirs          = "/tmp"
       val postgresServerComponentID = ComponentId(AgentConstants.databasePrefix, Service)
       val postgresServerConnection  = TcpConnection(postgresServerComponentID)
@@ -63,7 +63,7 @@ class IntegrationTestWithAuth extends EswTestKit(AAS) with GatewaySetup with Age
         val spawnResponse = agentService
           .spawnPostgres(
             agentPrefix,
-            Path.of(pgDataConfPath.getAbsolutePath),
+            Path.of(pgDataConfPath),
             Some(8085),
             dbUnixSocketDirs,
             Some("713742785d")
