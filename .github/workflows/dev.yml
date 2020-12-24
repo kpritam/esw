@@ -40,13 +40,6 @@ jobs:
           sdk install kotlin
           sudo ln -s $(which kotlinc) /usr/local/bin/kotlinc
 
-      - name: Build
-        run: |
-          sbtn scalafmtCheck
-          sbtn clean
-          sbtn makeSite
-          sbt -DenableFatalWarnings=true ';set every Seq(scalafmtOnCompile := false); test:compile; multi-jvm:compile;'
-
       - name: Install Postgres
         run: |
           sudo apt-get update
@@ -54,5 +47,6 @@ jobs:
           echo "/usr/lib/postgresql/12/bin/" >> $GITHUB_PATH
           sudo -i -u postgres
           /usr/lib/postgresql/12/bin/initdb -D /tmp/postgres/
+          postgres --help
           sbt publishLocal
           sbt -Dakka.actor.serialize-messages=on -DenableCoverage=true -DgenerateStoryReport=true esw-integration-test/testOnly esw.integration.IntegrationTestWithAuth
