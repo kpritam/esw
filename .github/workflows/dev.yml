@@ -5,17 +5,12 @@ on:
     branches: [master]
   push:
     branches: [master]
-    paths-ignore:
-      - "scripts/**"
-      - "tools/**"
-      - "jenkins/**"
-      - "notes/**"
 
 jobs:
   build:
     runs-on: ubuntu-18.04
     env:
-      PGDATA: /tmp/postgres/
+      PGDATA: /tmp/postgres
 
     steps:
       - uses: actions/checkout@v2
@@ -23,31 +18,10 @@ jobs:
         with:
           jvm: 11
           apps: sbt sbtn
-      - uses: coursier/cache-action@v5
-
-      - name: Install Redis
-        run: |
-          wget http://download.redis.io/redis-stable.tar.gz
-          tar xvzf redis-stable.tar.gz
-          cd redis-stable
-          make
-          sudo cp src/redis-sentinel /usr/local/bin/
-
-      - name: Install Kotlin
-        run: |
-          curl -s https://get.sdkman.io | bash
-          source "/home/runner/.sdkman/bin/sdkman-init.sh"
-          sdk install kotlin
-          sudo ln -s $(which kotlinc) /usr/local/bin/kotlinc
 
       - name: Install Postgres
         run: |
-          sudo apt-get update
-          sudo apt-get -y install postgresql-12
-          echo "/usr/lib/postgresql/12/bin/" >> $GITHUB_PATH
-          sudo -i -u postgres
-          /usr/lib/postgresql/12/bin/initdb -D /tmp/postgres/
-          export PATH="//usr/lib/postgresql/12/bin/:$PATH"
-          postgres --help
-          sbt publishLocal
-          sbt -Dakka.actor.serialize-messages=on -DenableCoverage=true -DgenerateStoryReport=true esw-integration-test/testOnly esw.integration.IntegrationTestWithAuth
+          echo "/usr/lib/postgresql/13/bin" >> $GITHUB_PATH
+          /usr/lib/postgresql/13/bin/initdb -D /tmp/postgres
+
+      - run: sbtn esw-integration-test/testOnly esw.integration.IntegrationTestWithAuth
