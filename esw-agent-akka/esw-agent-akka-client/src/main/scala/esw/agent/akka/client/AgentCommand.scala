@@ -55,7 +55,7 @@ object AgentCommand {
         version: Option[String]
     ) extends SpawnCommand {
       override def commandArgs(extraArgs: List[String]): List[String] = {
-        def command = s"postgres --hba_file=$pgDataConfPath --unix_socket_directories=$dbUnixSocketDirs"
+        def command = s"\"postgres --hba_file=$pgDataConfPath --unix_socket_directories=$dbUnixSocketDirs\""
         (port match {
           case Some(value) =>
             List("--prefix", prefix.toString(), "--command", command + s" -i -p $value", "--port", value.toString)
