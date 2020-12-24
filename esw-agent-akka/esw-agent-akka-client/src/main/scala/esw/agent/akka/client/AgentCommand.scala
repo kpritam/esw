@@ -1,13 +1,13 @@
 package esw.agent.akka.client
 
-import java.nio.file.Path
-
+import java.nio.file.{Path, Paths}
 import akka.actor.typed.ActorRef
 import csw.location.api.models.ComponentType.{SequenceComponent, Service}
 import csw.location.api.models.Connection.{AkkaConnection, TcpConnection}
 import csw.location.api.models._
 import csw.prefix.models.Prefix
 import csw.prefix.models.Subsystem.ESW
+import esw.agent.akka.client.AgentCommand.SpawnCommand.SpawnPostgres
 import esw.agent.service.api._
 import esw.agent.service.api.models.{KillResponse, SpawnResponse}
 
@@ -55,7 +55,7 @@ object AgentCommand {
         version: Option[String]
     ) extends SpawnCommand {
       override def commandArgs(extraArgs: List[String]): List[String] = {
-        def command = s"\"postgres --hba_file=$pgDataConfPath --unix_socket_directories=$dbUnixSocketDirs\""
+        def command = s""""postgres --hba_file=$pgDataConfPath --unix_socket_directories=$dbUnixSocketDirs""""
         (port match {
           case Some(value) =>
             List("--prefix", prefix.toString(), "--command", command + s" -i -p $value", "--port", value.toString)
